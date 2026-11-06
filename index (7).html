@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<title>7 Steps to Win · Manager</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: mirrors the seller app. Top bar with stepper, step cards row, sales stage band, then manager tools (funnel diagnostic, team check, week). Step pages open by hash. */
+:root{
+  --bg:#F6F8FC; --panel:#FFFFFF; --band:#EEF2FB; --line:#E3E8F0; --line2:#C9D0DC;
+  --ink:#17233B; --body:#3D4451; --muted:#667085;
+  --navy:#1837A3; --navy-d:#10267A;
+  --focus:#C2412D; --focus-s:#FCEDEA; --build:#A86400; --build-s:#FDF3E2; --strong:#2F7D3A; --strong-s:#E8F4EA;
+  --tmix:88%; --smix:9%;
+  --shadow:0 1px 2px rgba(23,35,59,.06),0 4px 14px rgba(23,35,59,.06);
+  --sans:"IBM Plex Sans",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1522;--panel:#161E2E;--band:#1B2540;--line:#26314A;--line2:#36435F;
+  --ink:#E8EDF7;--body:#C3CBDA;--muted:#8D97AB;--navy:#7D98F2;--navy-d:#A9BCF7;
+  --focus:#F08A76;--focus-s:#3A1F1C;--build:#E2B05A;--build-s:#33280F;--strong:#7CC489;--strong-s:#17301C;
+  --tmix:55%;--smix:16%;--shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1522;--panel:#161E2E;--band:#1B2540;--line:#26314A;--line2:#36435F;
+  --ink:#E8EDF7;--body:#C3CBDA;--muted:#8D97AB;--navy:#7D98F2;--navy-d:#A9BCF7;
+  --focus:#F08A76;--focus-s:#3A1F1C;--build:#E2B05A;--build-s:#33280F;--strong:#7CC489;--strong-s:#17301C;
+  --tmix:55%;--smix:16%;--shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--body);font-family:var(--sans);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+h1,h2,h3{color:var(--ink);margin:0;text-wrap:balance}
+h1{font-size:clamp(26px,3.6vw,34px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:20px;font-weight:600}
+h3{font-size:15px;font-weight:600}
+p{margin:0}
+a{color:var(--navy)}
+.lbl{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.inner{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}
+.top .inner{display:flex;align-items:center;gap:18px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;font-weight:600;white-space:nowrap}
+.brand .tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--navy);border-radius:999px;padding:3px 9px}
+.stepper{display:flex;gap:4px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none}
+.sp{display:flex;align-items:center;gap:7px;text-decoration:none;padding:4px 10px 4px 4px;border-radius:999px;color:var(--muted);font-size:13px;white-space:nowrap}
+.sp:hover,.sp.on{background:var(--band);color:var(--ink)}
+.sp b{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--c);color:var(--on,#fff);font-size:11px}
+.tools{display:flex;gap:6px}
+.tbtn{font:inherit;font-size:13px;font-weight:500;border:1px solid var(--line2);background:var(--panel);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.tbtn:hover{border-color:var(--navy);color:var(--navy)}
+
+main{padding-block:28px 48px;display:grid;gap:28px}
+.hero{display:grid;gap:10px}
+.hero p{max-width:66ch;color:var(--body);font-size:16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{font:inherit;font-size:13px;border:1px solid var(--line2);background:var(--panel);color:var(--body);border-radius:999px;padding:5px 12px;cursor:pointer}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+
+/* step cards */
+.cards{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:12px;padding-top:24px}
+@media (max-width:1150px){.cards{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:36px}}
+@media (max-width:620px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.card{--s:color-mix(in srgb,var(--c) var(--smix),var(--panel));--t:color-mix(in srgb,var(--c) var(--tmix),var(--ink));
+  position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;color:var(--body);
+  background:var(--s);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;padding:30px 12px 14px;transition:transform .18s,box-shadow .18s,opacity .2s;min-width:0}
+.card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.card.dim{opacity:.32}
+.card .num{position:absolute;top:-22px;left:50%;transform:translateX(-50%);width:44px;height:44px;border-radius:50%;background:var(--c);color:var(--on,#fff);font-weight:700;font-size:18px;display:grid;place-items:center;border:3px solid var(--panel);box-shadow:0 2px 6px rgba(23,35,59,.15)}
+.card .sub{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t);margin-bottom:2px}
+.card .name{color:var(--t);font-size:16px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;margin-bottom:6px}
+.card .desc{font-size:13px;line-height:1.4}
+.card .metric{border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent);margin-top:auto;padding-top:9px;width:100%;display:grid;gap:2px}
+.card .metric .m{font-size:13px;font-weight:600;color:var(--ink)}
+.card .metric .q{font-size:12px;color:var(--muted);font-style:italic}
+.card .gap{margin-top:8px;font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px;background:var(--focus-s);color:var(--focus)}
+.card .open{margin-top:10px;font-size:12px;font-weight:600;color:var(--t)}
+.band{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:12px}
+@media (max-width:1150px){.band{grid-template-columns:1fr 1fr 1fr}}
+.band div{background:var(--band);color:var(--navy-d);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;border-radius:8px}
+@media (min-width:1151px){.band .b1{grid-column:1/6}.band .b2{grid-column:6/8}.band .b3{grid-column:8/9}}
+
+/* panels */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:18px;min-width:0}
+.panel-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.panel-head p{color:var(--muted);font-size:14px;max-width:62ch;margin-top:4px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:860px){.duo{grid-template-columns:1fr}}
+select,input[type=text],input[type=number],textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--panel);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;width:100%}
+textarea{min-height:70px;resize:vertical}
+
+/* funnel */
+.funnel{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+@media (max-width:860px){.funnel{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:480px){.funnel{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fbox{display:grid;gap:4px}
+.fbox label{font-size:12px;color:var(--muted);font-weight:500}
+.fbox input{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:16px}
+.conv{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line2)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+td input{width:72px;padding:4px 6px;font-family:var(--mono)}
+.bar{height:8px;border-radius:4px;background:var(--line);position:relative;min-width:110px}
+.bar i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--c)}
+.bar u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);text-decoration:none}
+.st{font-size:11px;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.st.good{background:var(--strong-s);color:var(--strong)}.st.mid{background:var(--build-s);color:var(--build)}.st.bad{background:var(--focus-s);color:var(--focus)}
+.callout{border-left:4px solid var(--focus);background:var(--focus-s);border-radius:0 10px 10px 0;padding:12px 14px;color:var(--ink);font-size:14px}
+.callout a{font-weight:600}
+
+/* team check */
+.tc{overflow-x:auto}
+.tc table{min-width:760px}
+.tc th.stp{text-align:center}
+.tc td{text-align:center;padding:6px}
+.tc td:first-child{text-align:left;white-space:nowrap;color:var(--ink);font-weight:500}
+.cell{font:inherit;font-size:12px;font-weight:600;width:100%;min-width:78px;border:1px solid var(--line);border-radius:7px;padding:6px 4px;cursor:pointer;background:var(--panel);color:var(--muted)}
+.cell.s3{background:var(--strong-s);color:var(--strong);border-color:transparent}
+.cell.s2{background:var(--build-s);color:var(--build);border-color:transparent}
+.cell.s1{background:var(--focus-s);color:var(--focus);border-color:transparent}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.rm{font:inherit;border:0;background:none;color:var(--muted);cursor:pointer;font-size:16px;padding:0 4px}
+.rm:hover{color:var(--focus)}
+
+/* week */
+.week{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.week{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.week{grid-template-columns:1fr}}
+.wk{border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px;align-content:start}
+.wk p{font-size:14px}
+
+/* step page */
+.shead{--t:color-mix(in srgb,var(--c) var(--tmix),var(--ink));background:color-mix(in srgb,var(--c) var(--smix),var(--panel));border:1px solid var(--line);border-top:4px solid var(--c);border-radius:14px;padding:22px;display:grid;gap:10px}
+.shead .row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.shead .num{width:48px;height:48px;border-radius:50%;background:var(--c);color:var(--on,#fff);font-weight:700;font-size:20px;display:grid;place-items:center;flex:0 0 48px}
+.shead h1{color:var(--t);text-transform:uppercase;letter-spacing:.02em}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.kv{grid-template-columns:1fr}}
+.kv>div{display:grid;gap:4px;align-content:start}
+.kv p{color:var(--ink)}
+.sgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:900px){.sgrid{grid-template-columns:minmax(0,1fr)}}
+ul.list{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+ul.list li{padding-left:18px;position:relative}
+ul.list li::before{content:"";position:absolute;left:2px;top:.6em;width:7px;height:7px;border-radius:2px;background:var(--line2)}
+ul.flags li::before{background:var(--focus)}
+ul.steps li::before{background:var(--strong)}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--ink)}
+.check:hover{background:var(--band)}
+.check input{width:18px;height:18px;accent-color:var(--navy);margin-top:2px;flex:0 0 18px}
+.check small{display:block;color:var(--muted);font-size:13px}
+.qbtn{font:inherit;font-size:14px;text-align:left;width:100%;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.qbtn:hover{border-color:var(--navy)}
+.qbtn span:last-child{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;flex:0 0 auto}
+.qbtn.copied span:last-child{color:var(--strong)}
+.stack{display:grid;gap:8px}
+.score{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .big{font-family:var(--mono);font-size:26px;color:var(--ink);font-variant-numeric:tabular-nums}
+.btn{font:inherit;font-size:14px;font-weight:600;border:0;border-radius:8px;padding:10px 16px;cursor:pointer;background:var(--navy);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line2);color:var(--ink)}
+pre.recap{white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;margin:0;background:var(--band);border-radius:8px;padding:12px;max-height:300px;overflow:auto;color:var(--ink)}
+.toast{font-size:13px;color:var(--strong);font-weight:600;min-height:1.2em}
+.nav2{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+footer{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+/* deal doctor */
+.sym{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:900px){.sym{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.sym{grid-template-columns:1fr}}
+.symt{display:grid;gap:4px;align-content:start;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--body);transition:border-color .15s,transform .15s}
+.symt:hover{border-color:var(--navy);transform:translateY(-1px)}
+.symt b{color:var(--ink);font-size:15px}
+.symt span{font-size:13px;color:var(--muted)}
+.dots{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.dots i{font-style:normal;font-size:10px;font-weight:700;color:var(--on,#fff);background:var(--c);border-radius:999px;padding:1px 7px}
+.search{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.search input{max-width:340px}
+.fx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);gap:20px;align-items:start}
+@media (max-width:900px){.fx{grid-template-columns:minmax(0,1fr)}}
+ol.plays{margin:0;padding:0;list-style:none;counter-reset:p;display:grid;gap:12px}
+ol.plays li{counter-increment:p;display:grid;grid-template-columns:30px 1fr;gap:10px}
+ol.plays li::before{content:counter(p);width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:700;display:grid;place-items:center}
+ol.plays b{color:var(--ink);display:block}
+.say{background:var(--band);border-radius:10px;padding:14px 16px;color:var(--ink);font-size:15px;line-height:1.55;font-style:italic}
+.walk{border-left:4px solid var(--muted);padding:8px 12px;color:var(--body);font-size:14px}
+.stuck{display:grid;gap:6px}
+.stuck a{text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--ink);font-size:14px;display:flex;justify-content:space-between;gap:8px}
+.stuck a:hover{border-color:var(--navy)}
+.stuck a span{color:var(--navy)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top"><div class="inner">
+  <a class="brand" href="#"><span>The 7 Steps to Win</span><span class="tag">Manager</span></a>
+  <nav class="stepper" id="stepper" aria-label="Steps"></nav>
+  <div class="tools">
+    <a class="tbtn" href="#doctor">Deal Doctor</a>
+    <a class="tbtn" href="#team-check">Team Check</a>
+    <a class="tbtn" href="#funnel">Funnel</a>
+  </div>
+</div></header>
+
+<main class="inner" id="app"></main>
+
+<script>
+const team=()=>S.names||[];
+const ROLES=["SDR","BTSS","BSS","BTS","TSS"];
+
+const STEPS=[
+{id:"find",num:"1",sub:"1A · Outbound",name:"Find",c:"#436B2B",roles:"SDR BTSS BSS TSS",
+ seller:"Build a quality list of the right accounts and people.",metric:"Connect rate",mq:"Are we creating conversations?",
+ mgr:"Make sure the list is worth calling. Low connect rates are usually a list problem before they are a skill problem.",
+ inspect:[["Accounts fit the territory and ICP","Right segment, industry and size"],["Personas named for each account","Titles that own the problem we solve"],["A reason to call now for the top accounts","Trigger, news, hiring, initiative"],["Contact data checked","Direct dials and emails that connect"]],
+ qs:["Show me your top 20 accounts this week. Why these 20?","Which persona are you going after, and what do they own?","What trigger makes this account worth a call right now?","Where is your contact data coming from, and how fresh is it?"],
+ flags:["List pulled with no filters","Same accounts as last month with no new angle","Contacts with titles that can't feel the pain","Connect rate falling while dials stay flat"],
+ step:["Build the list with new sellers in week one","Review ICP filters and territory intel together","Share account plays and triggers in team meeting"]},
+{id:"respond",num:"1",sub:"1B · Inbound",name:"Respond",c:"#1837A3",roles:"SDR",sm:true,
+ seller:"Work every inbound lead fast, before a competitor does.",metric:"Speed to lead",mq:"Are we responding within an hour?",
+ mgr:"Watch the clock. Inbound leads cool fast, and an hour lost is often the deal lost.",
+ inspect:[["Every new lead touched within the hour",""],["Multi-touch follow-up in place","Call, email and LinkedIn, not one email"],["First touch references what they engaged with",""],["Aged leads closed out or reassigned",""]],
+ qs:["How fast did you touch your last five inbound leads?","What did you say on the first touch?","How many attempts before you stop, and over how many days?","What happened to the leads that went quiet?"],
+ flags:["Leads untouched for more than a day","One attempt and done","Generic reply that ignores what they asked for","Queue growing with no owner"],
+ step:["Spot check the lead queue daily","Set alerts so leads route instantly","Reassign aged leads instead of letting them sit"]},
+{id:"reach-out",num:"2",name:"Reach Out",c:"#1837A3",roles:"SDR BTSS BSS TSS",
+ seller:"Call, email and message with a relevant reason to talk.",metric:"Meeting rate",mq:"Conversations to meetings",
+ mgr:"Listen to the calls. High connects with low meetings means the opener or the objection handling is breaking.",
+ inspect:[["Calls are recorded",""],["Opener gives a relevant reason to talk","Specific to the account or persona"],["Top objections have a practiced answer",""],["AI feedback on recent calls reviewed by the seller",""]],
+ qs:["Play me your opener like I'm the prospect.","What reason to talk did you give on your last booked meeting?","Which objection is costing you the most meetings?","What did the AI feedback flag on your last few calls?"],
+ flags:["Pitching in the first 30 seconds","Calls not recorded","Same message for every persona","Plenty of conversations, few meetings"],
+ step:["Review one recording per seller each week","Role-play the top objection in the 1:1","Run a team call block and debrief together"]},
+{id:"discover",num:"3",name:"Discover",c:"#E3A32D",on:"#2B1D00",roles:"SDR BTSS BSS TSS",
+ seller:"Have a short first conversation. Understand what they care about and whether there is a reason to keep talking.",metric:"2nd meeting rate",mq:"Do they want to continue?",
+ mgr:"Coach listening. A strong discovery ends with the client asking for the next meeting, not the seller asking for it.",
+ inspect:[["Seller talked less than half the call",""],["Client priorities captured in their words",""],["Next meeting on the calendar before the call ended",""],["Recap sent the same day","With a second stakeholder invited"]],
+ qs:["What do they care about, in their words?","Why would they want a second meeting?","What question would you cut next time, and what would you add?","Who else needs to be in meeting two?"],
+ flags:["Demo in the first call","No next step booked","Seller did most of the talking","No recap sent"],
+ step:["Listen to discovery recordings and score them together","Join first discovery calls for newer sellers","Practice the up-front agenda in the 1:1"]},
+{id:"engage",num:"4",name:"Engage",c:"#6544A3",roles:"BTSS BSS BTS TSS",
+ seller:"Share opportunity with the right business partners. Understand the problem, value, and solution.",metric:"Meetings to oppty rate",mq:"Are conversations becoming pipeline?",
+ mgr:"Turn good meetings into real pipeline. Check that the problem, value and solution are written down, and that the right partners and technical people are in.",
+ inspect:[["Opportunity created with the problem stated",""],["Value described in the client's terms","Time, cost, risk or revenue"],["Solution direction agreed",""],["Right business partner and technical seller engaged",""]],
+ qs:["Give me the problem, the value and the solution in one sentence each.","Which business partner fits this, and have you talked to them?","Who on the technical side needs to see this?","Why is this pipeline and not just a good conversation?"],
+ flags:["Meetings happening but no opps created","Opp with a blank or generic problem","Partner brought in late","Technical deal with no technical seller"],
+ step:["Broker the business partner introduction","Get technical resources assigned","Review opportunity hygiene weekly"]},
+{id:"qualify",num:"5",name:"Qualify",c:"#DE6723",roles:"BTSS BSS BTS TSS",
+ seller:"Move to QP when there is a real opportunity and evidence the client intends to move forward.",metric:"Engaged to QP",mq:"Are we turning engaged prospects into qualified opportunities?",
+ mgr:"QP is a promise to your forecast. Ask for evidence the client intends to move, and make qualifying out feel like a win.",
+ inspect:[["Pain quantified in the client's words","Hours, dollars, risk or delay"],["Critical event with a date","Why now, and what happens if they wait"],["Decision process and people named","Who signs, who can veto"],["Budget path discussed",""],["Client committed to a next step that costs them effort",""]],
+ qs:["What does this problem cost them, in their words?","What happens if they do nothing until next year?","Who signs, and who can say no?","What evidence do you have that they intend to move forward?"],
+ flags:["QP based on interest alone","Single-threaded on one contact","No date driving the decision","\"They need to think about it\""],
+ step:["Review the deal before it moves to QP","Make the qualify-out call together","Score discovery against the qualification checklist"]},
+{id:"progress",num:"6",name:"Progress",c:"#3C797E",roles:"BTS BTSS BSS TSS",
+ seller:"Agree on what we're solving, who needs to be involved, the solution and how they could buy.",metric:"QP quality and progression",mq:"Are deals active and moving forward quickly?",
+ mgr:"Keep deals moving. Ask what changed since last week and what proves it. Stalled deals get a plan or get removed.",
+ inspect:[["Written agreement on what we're solving",""],["Stakeholders mapped, economic buyer met",""],["Solution validated against agreed success criteria","Demo or POC with an end date"],["Buying path known","Direct, a business partner, or e-commerce"],["Mutual plan with dates to signature",""]],
+ qs:["When did this deal last move, and what moved it?","Who is the economic buyer, and have we met them?","How will they buy: our paper, a partner, or e-commerce?","What's in the mutual plan for the next 30 days?"],
+ flags:["Stage unchanged for 30 days or more","Close date pushed twice","Open-ended POC","Price discussed before value"],
+ step:["Run an exec sponsor call","Review the value case line by line","Open the deal desk conversation early"]},
+{id:"win-deploy",num:"7",name:"Win & Deploy",c:"#3E6328",roles:"BTSS BSS TSS",
+ seller:"Close direct, through a partner or e-commerce, and set up the client for success and value realization.",metric:"QP to won conversion",mq:"Are we closing opportunities?",
+ mgr:"Forecast on evidence, then protect the deployment. A win the client never uses is a renewal you lose.",
+ inspect:[["Signer and signature date confirmed",""],["Route to buy confirmed and quote issued",""],["Procurement, legal and security under way",""],["Deployment plan with owners and a kickoff date",""],["Success metrics handed to delivery or Customer Success",""]],
+ qs:["Who signs, and on what day?","What could push this into next quarter?","Who owns deployment on their side and ours?","How will we show value in the first 90 days?"],
+ flags:["No named signer","Silence after the quote","Nobody owns deployment","Seller disappears after signature"],
+ step:["Scrutinize commit deals on the forecast call","Make the last-mile exec call","Set a 90-day value check and share the win with the team"]}
+];
+
+// Deal Doctor scenarios: symptom → diagnosis → plays → talk track → manager move → walk-away rule
+const SC=[
+{id:"no-meeting",t:"Can't get a meeting",sym:"Lots of dials and emails, nobody bites.",steps:["find","reach-out"],
+ ask:["Did you call, or only email?","Is your reason to talk about their business, or about us?","Did you try at least three personas at the account?","Did you use a trigger from the last 90 days: earnings, hiring, a new exec, a new initiative?","Are you calling when your persona actually picks up, early morning or late afternoon?"],
+ plays:[["Lead with a trigger","Open with one specific thing you saw: a job posting for automation engineers, a comment on the earnings call, a new CIO. One line, then a question."],["Go wide, then up","Hit three to five people at the account in the same week. Peers talk, and an inside referral beats a cold call every time."],["Switch the channel","Email dead? Call. Calls going to voicemail? Leave 15 seconds that point to your email, then send a LinkedIn note referencing both."],["Use a peer story","Name a similar company in their industry and one outcome. No peer story? Share how your own company uses it."],["Ask a smaller question","Swap 'can we meet for 30 minutes' for 'is this on your radar this year, or should I check back in Q2?' A clear no is useful too."]],
+ say:"Hi [Name], it's [Seller] from [Company]. You don't know me, so I'll be quick. I saw you're hiring automation engineers, and teams doing that are usually buried in manual handoffs. Is that close, or am I off base?",
+ you:["Listen to three of their calls and fix the opener first","Rewrite one email together, live, in the 1:1","Run a team call block and sit with them for the first hour"],
+ walk:"After 8 to 10 touches across 3 or more personas over 3 weeks with no reply, park the account for 90 days and note why."},
+{id:"wrong-person",t:"Stuck with the wrong person",sym:"Our contact likes us but can't buy, and won't take us up.",steps:["engage","qualify","progress"],
+ ask:["Did you ask who else cares about this problem?","Do you know how they bought their last purchase of this size?","Did you ask your contact what they need to bring this to their boss?","Did you offer something the boss would want, like a value readout or an exec briefing?","Have you tried another door: finance, security, a business unit leader?"],
+ plays:[["Arm your contact","Give them a one-page summary of the problem, the cost and the outcome, in their own words, so they can pitch it upstairs. Make them look good."],["Ask the access question directly","'If this were to go forward, who besides you would need to be convinced?' Then: 'How would you suggest we get them involved?'"],["Give the exec a reason to show up","An executive briefing, a business value assessment, or an exec-to-exec peer call gives your contact cover to invite their boss."],["Go top down with cover","Send a short note to the exec referencing the work with your contact. Tell your contact first so it never feels like going around them."],["Multi-thread through technical","Put a technical seller or solution engineering in front of their architects. Technical champions often have the decision maker's ear."]],
+ say:"You've been a great partner on this. Can I be direct? Projects like this usually need [CFO or CIO] to sign off, and when we meet them late, things stall. What would make it easy for you to bring them into the next conversation?",
+ you:["Offer a manager-to-exec or executive sponsor call","Help the seller write the one-pager","Set a deadline: no contact with the economic buyer in 3 weeks and it comes out of QP"],
+ walk:"If the contact refuses any access to the decision maker after a direct ask, it isn't a real opportunity yet. Keep nurturing, but take it out of the forecast."},
+{id:"no-urgency",t:"No sense of urgency",sym:"They like it, but nothing has to happen by any date.",steps:["qualify","progress"],
+ ask:["Did you ask what happens if they do nothing for a year?","Did you put a monthly cost on the problem?","Is there an event on their calendar: budget cycle, audit, contract renewal, board meeting, launch, regulation?","Is the urgency theirs, or just our quarter end?","Does the person with the pain have the power to act on it?"],
+ plays:[["Find the cost of waiting","Turn the pain into a monthly number: hours times rate, errors times cost, delay times revenue. 'Every month this waits costs about $X.'"],["Anchor to their event","Tie the timeline to something they already care about: fiscal planning, an audit, a board update, a competing tool's renewal."],["Build the plan backward","Work back from their go-live date together. Legal takes 3 weeks, security 2, procurement 2. The plan often creates the urgency for you."],["Use a negative reverse","'Sounds like this might not be a priority this year, and that's fine. Should we pause?' People often push back and tell you why it does matter."],["Find a bigger pain","If this problem isn't urgent, go back to discovery. Ask what's on the exec's top three this year and whether we connect to any of it."]],
+ say:"Help me understand. If nothing changes and we talk again in 12 months, what has that cost you? And who feels that the most?",
+ you:["Review the value case and push for a real number","Don't let it be forecast without a client-driven date","Role-play the negative reverse with the seller"],
+ walk:"If there's no cost of inaction and no date after two honest attempts, move it to nurture. Manufactured urgency wastes everyone's quarter."},
+{id:"gone-dark",t:"Deal went dark",sym:"They were engaged. Now no replies to calls or emails.",steps:["discover","progress","win-deploy"],
+ ask:["When did they last reply, and what did we send right before the silence?","Did the last meeting end with a date for the next one?","Have you tried anyone other than the main contact?","Did something change at the company: reorg, layoffs, earnings, new exec?","Did a price or proposal go out just before it went quiet?"],
+ plays:[["Check the news first","Look for a reorg, acquisition, new exec or earnings miss. Reference it. It shows you're paying attention, not chasing."],["Go around the silence, politely","Reach the technical contact, a second stakeholder, or the business partner who knows them. Someone else will often tell you what happened."],["Send the close-out email","Short and easy to answer: 'Have priorities changed, or should I close this out on my side?' Permission to say no is what gets replies."],["Change the format","Call instead of email. Send a 60-second video. Ask a yes or no question they can answer in one word."],["Bring a new reason","A peer result, a product update, or an insight tied to their goal. Never 'just checking in'."]],
+ say:"Hi [Name], I haven't heard back, which usually means one of three things: priorities shifted, timing is off, or we missed something. Any of those is fine to tell me. Should I close this out for now?",
+ you:["Make a manager-to-exec call if the deal is material","Check whether it was ever really qualified","Pull it from commit until two-way contact is back"],
+ walk:"After 3 attempts over 3 weeks across 2 or more contacts, plus the close-out email, close it lost or move it to nurture. Log the reason."},
+{id:"stalled",t:"Deal is stalled",sym:"30+ days in the same stage. Meetings happen, nothing moves.",steps:["qualify","progress"],
+ ask:["What was the last thing the client did, not us?","Is there a mutual plan with dates and owners on both sides?","Is the next step on their calendar?","Are the success criteria agreed in writing?","Is someone missing who needs to be in the room?"],
+ plays:[["Build a mutual action plan","One page: steps, owners on both sides, dates to signature. Review it every meeting. If they won't commit to dates, that tells you something."],["Ask for a decision on the decision","'What would need to be true for you to decide by [date]?'"],["Shrink the first step","Offer a smaller first scope, a paid pilot, or an e-commerce or marketplace purchase so they can say yes faster."],["Reset with the sponsor","Ask for 15 minutes with the exec to confirm the problem is still a priority and the plan still fits."],["Name the stall","'We've met three times and haven't moved. Is something getting in the way that we haven't talked about?'"]],
+ say:"I want to respect your time. We've had good conversations, but nothing has moved in a month. Is that because timing changed, or is there a concern we haven't talked about yet?",
+ you:["Inspect the mutual plan in deal review","Join the next call and ask the hard question yourself","Set a 2-week checkpoint: it moves or it comes out of QP"],
+ walk:"If the client hasn't taken a single action in 45 days, it isn't a deal. Take it out of the forecast."},
+{id:"single-thread",t:"Single-threaded on one champion",sym:"Everything runs through one person. If they leave, the deal leaves.",steps:["engage","qualify","progress"],
+ ask:["Who else at the account has met us?","Who else feels this problem: IT, finance, security, the business?","Did you ask your champion who will object?","Does their technical team know this is happening?"],
+ plays:[["Map the room","List the decision maker, budget owner, technical evaluator, end users, security and procurement. Mark who we've met. Fill the gaps."],["Give each new person a reason to show up","A security review, an architecture session, or a value review pulls in people who wouldn't come to a sales call."],["Match people","Our technical seller to their architect. You or your exec to their exec. The business partner to their delivery lead."],["Ask the champion for help","'Who would be most skeptical about this? I'd rather hear their concerns now than at the end.'"]],
+ say:"You've been driving this and I appreciate it. Who's most likely to poke holes in it? I'd like to hear their concerns early so you're not stuck defending it alone.",
+ you:["Require three contacts met before anything goes to QP","Set up exec-to-exec alignment yourself","Bring a technical seller in to build a second thread"],
+ walk:""},
+{id:"no-budget",t:"No budget",sym:"We don't have budget for this.",steps:["qualify","progress"],
+ ask:["Is it no budget, or no budget yet?","Who owns budget for the problem, not for AI?","When does the next budget cycle start, and when are requests due?","Is there spend we could replace: another tool, contractors, manual work?","Did they buy anything similar this year?"],
+ plays:[["Find the problem's budget","Money lives with the pain: operations, customer service, IT, compliance. Stop selling AI and sell the outcome from that owner's budget."],["Self-fund it","Show savings that pay for it: retired tools, fewer contractor hours, fewer tickets, faster cycle times."],["Start small","A smaller first scope, a SaaS starter plan, or a marketplace purchase against existing cloud commit can avoid a new budget line."],["Get into the next cycle","Learn their budget calendar and help the champion build the request with real numbers before the deadline."],["Test it","'If the numbers made sense, would you find budget?' A yes means you have a value problem, not a budget problem."]],
+ say:"That's fair, I hear it a lot. If the business case showed this paying for itself inside a year, would budget still be the blocker, or would it become a question of timing?",
+ you:["Help build the business value case","Check marketplace and cloud commit options with your partner team","Don't forecast it until there's a budget path"],
+ walk:"No budget, no budget owner, and no budget cycle in the next 12 months means nurture."},
+{id:"competitor",t:"Competing with an incumbent, another vendor, or in-house",sym:"We already use [another tool]. Or: our team can build this.",steps:["engage","qualify","progress"],
+ ask:["Do we know what they've tried, and what didn't work?","Did we ask what they need that their current option doesn't do?","Are we competing on features, or on their outcome?","Do they know what building in-house costs over three years?","Can we sit alongside the incumbent instead of replacing it?"],
+ plays:[["Don't bash, ask","'What's working well with it? Where does it fall short?' Let them name the gap."],["Change the criteria","Steer the evaluation toward what they care about most and where you are genuinely strong. Don't fight on the incumbent's home turf."],["Coexist","Position your solution next to the incumbent instead of replacing it. Find the gap it leaves and fill that."],["Price the build","For in-house, cost out engineers, maintenance, security and time to value, then compare it to buying."],["Prove it","A peer reference, a solution engineering session, or a side-by-side on their own use case."]],
+ say:"Makes sense, a lot of our clients use [incumbent] too. Where we usually come in is when they need [the gap you solve]. Is that something you're running into, or not yet?",
+ you:["Get the seller competitive enablement","Bring a technical seller for a side-by-side","Line up a reference customer call"],
+ walk:"If they've already chosen and signed, ask for a 6-month check-in and leave on good terms."},
+{id:"price",t:"Price pushback or discount ask",sym:"It's too expensive. We need a better number.",steps:["progress","win-deploy"],
+ ask:["Too expensive compared to what?","Did we agree on value before we shared price?","Is this the economic buyer, or procurement doing their job?","What would we get in return for a concession?","Is the issue the total, the annual amount, or the payment timing?"],
+ plays:[["Ask 'compared to what?'","Find the anchor: a competitor quote, last year's budget, or a gut feel. Each one needs a different answer."],["Go back to value","Restate the cost of the problem and the agreed outcome. A price looks different next to a $2M problem."],["Trade, never give","Every concession gets something back: longer term, faster signature, a reference, a case study, more scope."],["Change the shape, not the price","Phase the rollout, adjust scope, change the term or the payment timing before touching discount."],["Get deal desk in early","Know your walk-away and approval path before the negotiation, not during it."]],
+ say:"I understand. Before we talk numbers, help me with the comparison. Is it more than you expected, more than another option, or more than the budget you have today?",
+ you:["Approve concessions and hold the give and get line","Join the call if the seller is giving ground","Engage deal desk before the client asks"],
+ walk:"If the only thing that matters is the lowest price and the problem is small, walk away politely."},
+{id:"paperwork",t:"Stuck in procurement, legal, or security",sym:"The business said yes. Paperwork has stalled for weeks.",steps:["win-deploy"],
+ ask:["Did we map the paper process before the verbal yes?","Who owns it on their side, by name?","Have we sent the security and compliance documents?","Is a non-standard term holding it up?","Does the champion know it's stuck?"],
+ plays:[["Map it, then work it","Ask the champion for every step after approval: vendor setup, security review, legal, PO. Put a name and a date on each."],["Front-load security","Send your security, trust and compliance materials before they ask."],["Use existing paper","Check for an existing master agreement, a business partner's contract, or a marketplace purchase that skips new vendor setup."],["Escalate together","Ask the champion to push internally with a clear ask and date. Bring your contracts team in early on redlines."]],
+ say:"We want to make this easy for your team. Could you walk me through everything that happens after you say yes, and who owns each step, so we can get ahead of anything we need to send?",
+ you:["Get your contracts or legal team on the redlines","Look for existing agreements or partner paper","Call their procurement lead if the deal is material"],
+ walk:""},
+{id:"champion-left",t:"Champion left or changed roles",sym:"Our main contact is gone. The deal is in limbo.",steps:["qualify","progress","win-deploy"],
+ ask:["Who inherited the project?","Did the champion introduce us to anyone before leaving?","Is the problem still there?","Can the old champion still help from their new role or company?"],
+ plays:[["Ask for a handoff","If they're still reachable, ask the champion to introduce their successor."],["Re-qualify fast","Meet the new owner with fresh discovery. Don't assume they agree with the old plan."],["Go to the sponsor","Reconfirm priority with the exec who backed it."],["Follow the champion","If they moved companies, that's a new opportunity at the new company."]],
+ say:"Congratulations on the new role. Before you go, who would be best to pick up the work we started, and would you be open to a quick intro?",
+ you:["Make an exec call to reconfirm priority","Reset the forecast until the new owner engages","Use it as a coaching moment on multi-threading"],
+ walk:""},
+{id:"poc-drag",t:"POC or pilot with no decision",sym:"The pilot keeps going. No yes, no no.",steps:["progress"],
+ ask:["Were success criteria written and agreed before it started?","Is there an end date?","Who decides, and have they seen results?","Is the client doing their share of the work?","What happens the day after the pilot ends?"],
+ plays:[["Set the finish line","Write three success criteria with the client, plus an end date. No criteria, no POC."],["Book the readout now","Put the results meeting with the decision maker on the calendar before the pilot starts."],["Connect it to a purchase","Agree up front: if we hit the criteria, what's the next step and the timing to buy?"],["Make it paid","A paid pilot creates commitment and usually converts better than free work."]],
+ say:"Before we kick off, let's agree on what success looks like and what happens if we hit it. If we meet these three criteria by the 30th, would you be ready to move forward?",
+ you:["Approve POC resources only with written criteria","Attend the readout","Pull resources if the client isn't participating"],
+ walk:"If the pilot hits the criteria and they still won't decide, the pain wasn't real or the buyer wasn't in the room. Go back to Qualify."},
+{id:"send-info",t:"\"Just send me some information\"",sym:"The brush-off, early in the call.",steps:["reach-out","discover"],
+ ask:["Did you ask what they'd want the information to answer?","Did you get a time to follow up?","Did you ask a question before agreeing to send it?"],
+ plays:[["Qualify the ask","'Happy to. So I send something useful, what are you working on that made this worth a look?'"],["Send less, book more","Send one relevant thing, not a brochure, and book 15 minutes to discuss it."],["Give them an out","'If after reading it this isn't a fit, could you just tell me? That's completely fine.'"]],
+ say:"Sure, I can do that. So I don't send you a pile of PDFs, what's the one question you'd want it to answer?",
+ you:["Role-play this objection until it's automatic"],
+ walk:""},
+{id:"no-second",t:"Good first call, no second meeting",sym:"Great conversation. Then nothing.",steps:["discover"],
+ ask:["Did the call end with a date for the next meeting?","Did they say what they care about, or did we?","Did you send a recap within 24 hours?","Was there a clear reason for meeting two?"],
+ plays:[["Book before you hang up","With five minutes left, not at the end: 'Let's get time on the calendar now. Does Tuesday work?'"],["Recap in their words","Send their priorities, what we heard, and the proposed next step with a date. Ask them to correct it."],["Give meeting two a purpose","A tailored demo, a value conversation, or a session with their team. Name who should attend."]],
+ say:"Based on what you shared, it seems worth a second conversation with your [technical lead] to see if this fits your environment. Want to grab 30 minutes next week, or is that premature?",
+ you:["Listen to the last five minutes of their discovery calls","Coach booking the next step in a role play"],
+ walk:""},
+{id:"just-exploring",t:"Interested, but no real opportunity",sym:"We're just exploring AI right now.",steps:["engage","qualify"],
+ ask:["Exploring for which problem?","Who asked them to explore?","What happens when they finish exploring?","Is there a pilot budget or innovation fund?"],
+ plays:[["Find who asked","Exploring usually comes from an exec mandate. Find that exec and their goal."],["Pick one use case","Help them choose one problem with a measurable outcome instead of exploring everything."],["Offer a structured path","A discovery workshop or solution engineering session turns exploring into a plan with dates."]],
+ say:"A lot of teams are in exploring mode right now. Usually someone up the chain asked for it. Who's expecting an answer, and what would a good outcome look like for them?",
+ you:["Keep it out of pipeline until there's a problem and an owner","Approve a workshop only when there's an exec sponsor"],
+ walk:""},
+{id:"slipping",t:"Close date keeps slipping",sym:"Pushed to next month, again.",steps:["progress","win-deploy"],
+ ask:["Who set the close date, us or them?","What exactly has to happen between now and signature?","Do we know the signer and their calendar?","What changed since the last slip?"],
+ plays:[["Let them set the date","Ask 'When do you need this live?' and work backward. Their date sticks better than ours."],["Close plan with names","List every remaining step, owner and date. Review it with the champion weekly."],["Ask what would push it","'What could cause this to slip again?' Then plan for it."],["Downgrade honestly","After the second slip, take it out of commit until the plan is rebuilt."]],
+ say:"This has moved twice, and that's OK, but I want to plan around the real date. What has to happen on your side before it can be signed, and who owns each piece?",
+ you:["Challenge it on the forecast call","Join a close-plan review with the champion"],
+ walk:""},
+{id:"inbound-quiet",t:"Inbound lead won't respond",sym:"They filled out a form, then went silent.",steps:["respond"],
+ ask:["How fast was the first touch?","Did you reference what they downloaded or asked about?","Did you call as well as email?","How many attempts, over how many days?"],
+ plays:[["Speed","Call within the hour. Most inbound leads go cold within a day."],["Reference their action","'You grabbed our guide on AI agents. Was that for a project or research?'"],["Run a short sequence","Six to eight touches over two weeks across phone, email and LinkedIn."],["Offer something useful","A relevant case study or a quick assessment, not 'can we meet?'"]],
+ say:"Hi [Name], you downloaded our guide on [topic] yesterday. Curious, was that for something you're working on now, or more research?",
+ you:["Spot check speed to lead daily","Review the inbound sequence with the seller"],
+ walk:""},
+{id:"next-year",t:"\"Let's revisit next year\"",sym:"Timing pushback without a clear reason.",steps:["qualify","win-deploy"],
+ ask:["Why next year, specifically?","Is it budget, bandwidth, or priority?","What would have to change for it to be this year?","Who decided to wait?"],
+ plays:[["Find the real reason","Budget, bandwidth and priority each have a different fix. Ask which one it is."],["Cost the delay","Show what waiting six months costs, using their numbers."],["Offer a smaller start now","A first phase or starter scope keeps momentum without a big commitment."],["Lock the restart","If the delay is real, book the restart meeting now and tie it to their planning cycle."]],
+ say:"Totally understand. Is it that the budget isn't there, the team doesn't have time, or other things are higher priority right now? I'd handle each of those a little differently.",
+ you:["Decide with the seller: nurture or push","Make sure it leaves the current forecast"],
+ walk:"If it's a genuine priority call by the exec, respect it, book the restart, and move on."}
+];
+const scById=id=>SC.find(x=>x.id===id);
+const scForStep=id=>SC.filter(x=>x.steps.includes(id));
+
+// funnel stages: team counts and conversions that map to step metrics
+const FUN=[
+ {k:"conv",label:"Conversations"},{k:"mtg",label:"Meetings"},{k:"mtg2",label:"2nd meetings"},
+ {k:"opp",label:"Opps created"},{k:"qp",label:"QP"},{k:"won",label:"Won"}];
+const RATES=[
+ {step:"reach-out",name:"Meeting rate",from:"conv",to:"mtg",target:20},
+ {step:"discover",name:"2nd meeting rate",from:"mtg",to:"mtg2",target:50},
+ {step:"engage",name:"Meetings to oppty",from:"mtg",to:"opp",target:30},
+ {step:"qualify",name:"Engaged to QP",from:"opp",to:"qp",target:50},
+ {step:"win-deploy",name:"QP to won",from:"qp",to:"won",target:30}];
+const EXAMPLE={conv:120,mtg:18,mtg2:8,opp:5,qp:2,won:1};
+
+const KEY="flm7-v2";
+let S={role:"All",fwho:"Team",funnel:{},targets:{},team:{},checks:{},names:[]};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)S=Object.assign(S,s);}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const byId=id=>STEPS.find(s=>s.id===id);
+const cvars=s=>`--c:${s.c};--on:${s.on||"#fff"}`;
+
+function funnelData(){const f=S.funnel[S.fwho];return f?{nums:f,example:false}:{nums:EXAMPLE,example:true};}
+function rateRows(){
+  const {nums}=funnelData();
+  return RATES.map(r=>{const a=+nums[r.from]||0,b=+nums[r.to]||0,v=a?Math.round(b/a*100):null,t=+(S.targets[r.step]??r.target);
+    let st="mid";if(v===null)st="";else if(v>=t)st="good";else if(v<t*.7)st="bad";
+    return {...r,v,t,st,gapPct:v===null?0:(t-v)/t};});
+}
+function weakest(){const rows=rateRows().filter(r=>r.v!==null&&r.v<r.t);rows.sort((a,b)=>b.gapPct-a.gapPct);return rows[0];}
+
+function renderStepper(active){
+  $("stepper").innerHTML=STEPS.filter(s=>!s.sm).map(s=>`<a class="sp ${active===s.id?"on":""}" href="#${s.id}" style="${cvars(s)}"><b>${s.num}</b>${esc(s.name)}</a>`).join("");
+}
+
+function home(){
+  const w=weakest();
+  const roleOn=s=>S.role==="All"||s.roles.split(" ").includes(S.role);
+  return `
+  <section class="hero">
+    <span class="lbl">First line manager edition</span>
+    <h1>Coach the 7 Steps to Win</h1>
+    <p>Follow the process. Watch your team's conversion. Fix where it breaks. Open any step for what to inspect, the coaching questions to ask, and when to step in.</p>
+    <div class="chips" style="margin-top:6px"><span class="lbl" style="margin-right:4px">Coaching a</span>
+      ${["All",...ROLES].map(r=>`<button class="chip ${S.role===r?"on":""}" data-role="${r}" type="button">${r==="All"?"All roles":r}</button>`).join("")}</div>
+  </section>
+  <section class="cards">
+    ${STEPS.map(s=>`<a class="card ${roleOn(s)?"":"dim"}" href="#${s.id}" style="${cvars(s)}">
+      <span class="num">${s.num}</span>
+      ${s.sub?`<span class="sub">${esc(s.sub)}</span>`:""}
+      <span class="name">${esc(s.name)}</span>
+      <span class="desc">${esc(s.mgr.split(". ")[0])}.</span>
+      ${w&&w.step===s.id?`<span class="gap">Team gap</span>`:""}
+      <span class="metric"><span class="lbl">Watch</span><span class="m">${esc(s.metric)}</span><span class="q">${esc(s.mq)}</span></span>
+      <span class="open">Open coaching guide →</span></a>`).join("")}
+  </section>
+  <section class="band"><div class="b1">Create · Prepare → Engage</div><div class="b2">Progress · Qualify → Design → Propose → Negotiate</div><div class="b3">Close</div></section>
+  <section class="panel"><div class="panel-head"><div><span class="lbl">Deal Doctor</span><h2>Deal stuck? Start with the symptom.</h2><p>Prescriptive fixes for the ${SC.length} situations that stall deals most often.</p></div><a class="tbtn" href="#doctor">Search all scenarios →</a></div>
+    <div class="sym">${SC.slice(0,9).map(symTile).join("")}</div></section>
+  ${funnelPanel()}
+  <div class="duo">
+    <section class="panel"><div class="panel-head"><div><h2>Team Check</h2><p>Rate each seller on each step. See who needs coaching where, and which step the whole team should train on next.</p></div></div>
+      ${teamSummary()}
+      <div><a class="btn" href="#team-check" style="display:inline-block;text-decoration:none">Open Team Check</a></div></section>
+    <section class="panel"><div class="panel-head"><div><h2>A week in the life of a manager</h2><p>What a strong coaching week looks like.</p></div></div>
+      <div class="week" style="grid-template-columns:1fr 1fr">${weekCards()}</div></section>
+  </div>
+  <footer><span>Manager companion to the 7 Steps to Win</span><span>Your entries are saved in this browser only</span></footer>`;
+}
+
+function weekCards(){return [
+ ["Monday","Pipeline review","Every seller. One question per deal: what changed since last week, and what proves it?"],
+ ["Tue to Wed","Deal inspections","Top three deals per seller, run against the step's inspect list."],
+ ["Weekly 1:1","Call coaching","Listen to one recording first. Coach one habit, then check it next week."],
+ ["Thursday","Forecast","Commit only deals with a signer, a date and a route to buy."]
+].map(w=>`<div class="wk"><span class="lbl">${w[0]}</span><h3>${w[1]}</h3><p>${w[2]}</p></div>`).join("");}
+
+function funnelPanel(){
+  const {nums,example}=funnelData(),rows=rateRows(),w=weakest();
+  return `<section class="panel" id="funnel">
+   <div class="panel-head"><div><h2>Where is the funnel breaking?</h2><p>Enter weekly counts for the team or one seller. Each conversion maps to a step, so the biggest gap tells you which coaching guide to open.</p></div>
+     <div style="min-width:220px"><label class="lbl" for="fwho">Showing</label><select id="fwho">${["Team",...team()].map(n=>`<option ${S.fwho===n?"selected":""}>${esc(n)}</option>`).join("")}</select></div></div>
+   ${example?`<p class="lbl" style="color:var(--build)">Example numbers. Type your own to replace them.</p>`:""}
+   <div class="funnel">${FUN.map(f=>`<div class="fbox"><label for="f-${f.k}">${f.label}</label><input type="number" min="0" id="f-${f.k}" data-k="${f.k}" value="${nums[f.k]??""}"></div>`).join("")}</div>
+   <div class="conv"><table><thead><tr><th>Step</th><th>Conversion</th><th>Rate</th><th>Target %</th><th>vs target</th><th></th></tr></thead><tbody>
+   ${rows.map(r=>{const s=byId(r.step);return `<tr style="${cvars(s)}"><td><a href="#${s.id}">${s.num} · ${esc(s.name)}</a></td><td>${r.name}</td><td class="n">${r.v===null?"·":r.v+"%"}</td>
+     <td><input type="number" min="0" max="100" id="t-${r.step}" data-t="${r.step}" value="${r.t}" aria-label="Target for ${r.name}"></td>
+     <td><div class="bar"><i style="width:${Math.min(100,r.v||0)}%"></i><u style="left:${Math.min(100,r.t)}%"></u></div></td>
+     <td>${r.st?`<span class="st ${r.st}">${r.st==="good"?"On target":r.st==="mid"?"Close":"Fix here"}</span>`:""}</td></tr>`;}).join("")}
+   </tbody></table></div>
+   ${w?`<div class="callout">Biggest gap for ${esc(S.fwho==="Team"?"the team":S.fwho)}: <b>${w.name}</b> at ${w.v}% against a ${w.t}% target. Start with the <a href="#${w.step}">${esc(byId(w.step).name)} coaching guide</a>.</div>`:""}
+   <p class="lbl">Targets are yours to set. The defaults are placeholders.</p>
+  </section>`;
+}
+
+const LV=["Not rated","Focus","Building","Strong"];
+const MAIN=STEPS.filter(s=>!s.sm);
+function teamSummary(){
+  const counts=MAIN.map(s=>({s,n:team().filter(p=>(S.team[p]||{})[s.id]===1).length}));
+  const rated=team().some(p=>Object.keys(S.team[p]||{}).length);
+  if(!team().length)return `<p style="color:var(--muted)">Add your sellers, then rate each one by step. The step where most of your team needs focus becomes your next team training topic.</p>`;
+  if(!rated)return `<p style="color:var(--muted)">No ratings yet. Rate your sellers and the step with the most "Focus" ratings shows up here as your next team training topic.</p>`;
+  counts.sort((a,b)=>b.n-a.n);const top=counts[0];
+  return top.n?`<div class="callout" style="border-color:var(--navy);background:var(--band)">Team training topic: <a href="#${top.s.id}">${esc(top.s.name)}</a>. ${top.n} of ${team().length} sellers are rated Focus there.</div>`:`<p>No sellers rated Focus yet.</p>`;
+}
+function teamPage(){
+  return `<section class="hero"><span class="lbl">Team Check</span><h1>Who needs coaching where?</h1>
+   <p>Tap a cell to cycle Focus, Building and Strong. Use this the way sellers use their Readiness Check, but from your view of their calls and deals.</p>
+   <div class="legend"><span class="st bad">Focus</span><span class="st mid">Building</span><span class="st good">Strong</span></div></section>
+  <section class="panel">
+   <form class="search" id="addForm"><input type="text" id="newName" placeholder="Add a seller's name" aria-label="Seller name"><button class="btn" type="submit">Add seller</button></form>
+   ${team().length?teamSummary():`<p style="color:var(--muted)">Add your sellers above. Names are saved in your browser only, so each manager builds their own team.</p>`}
+   ${team().length?`<div class="tc"><table><thead><tr><th>Seller</th>${MAIN.map(s=>`<th class="stp"><a href="#${s.id}">${s.num} ${esc(s.name)}</a></th>`).join("")}<th class="stp">Coach next</th></tr></thead><tbody>
+   ${team().map(p=>{const r=S.team[p]||{};const f=MAIN.find(s=>r[s.id]===1);
+     return `<tr><td><button type="button" class="rm" data-rm="${esc(p)}" aria-label="Remove ${esc(p)}">×</button> ${esc(p)}</td>${MAIN.map(s=>{const v=r[s.id]||0;return `<td><button type="button" class="cell s${v}" data-p="${esc(p)}" data-s="${s.id}">${LV[v]}</button></td>`;}).join("")}
+     <td>${f?`<a href="#${f.id}">${esc(f.name)}</a>`:`<span style="color:var(--muted)">·</span>`}</td></tr>`;}).join("")}
+   </tbody></table></div>
+   <div><button class="btn ghost" id="clearTeam" type="button">Clear ratings</button></div>`:""}</section>`;
+}
+
+function stepPage(s){
+  const ck=S.checks[s.id]||[],c=s.inspect.filter((_,i)=>ck[i]).length,n=s.inspect.length,i=STEPS.indexOf(s);
+  const v=c===0?["Not inspected",""]:c===n?["Ready to advance","good"]:c/n>=.6?["Hold here","mid"]:["At risk","bad"];
+  const prev=STEPS[i-1],next=STEPS[i+1];
+  return `
+  <section class="shead" style="${cvars(s)}">
+    <div class="row"><span class="num">${s.num}</span><div><span class="lbl">${s.sub?esc(s.sub)+" · ":""}Step ${s.num} coaching guide · ${s.roles.split(" ").join(", ")}</span><h1>${esc(s.name)}</h1></div></div>
+    <div class="kv">
+      <div><span class="lbl">Seller's job</span><p>${esc(s.seller)}</p></div>
+      <div><span class="lbl">Your job</span><p>${esc(s.mgr)}</p></div>
+      <div><span class="lbl">Metric to watch</span><p><b>${esc(s.metric)}</b><br><span style="color:var(--muted)">${esc(s.mq)}</span></p></div>
+    </div>
+  </section>
+  <div class="sgrid">
+    <div style="display:grid;gap:20px">
+      <section class="panel"><div><h2>Coaching questions</h2><p style="color:var(--muted);font-size:14px;margin-top:4px">Ask these in the 1:1 or deal review. Tap to copy.</p></div>
+        <div class="stack">${s.qs.map(q=>`<button class="qbtn" type="button"><span>${esc(q)}</span><span>COPY</span></button>`).join("")}</div></section>
+      <div class="duo">
+        <section class="panel"><h3>Red flags</h3><ul class="list flags">${s.flags.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></section>
+        <section class="panel"><h3>When you step in</h3><ul class="list steps">${s.step.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></section>
+      </div>
+    </div>
+    <div style="display:grid;gap:20px">
+    <section class="panel" aria-label="Stuck at this step">
+      <div><span class="lbl">Deal Doctor</span><h2>Stuck at ${esc(s.name)}?</h2><p style="color:var(--muted);font-size:14px;margin-top:4px">Pick what's happening for a prescriptive fix.</p></div>
+      <div class="stuck">${scForStep(s.id).map(x=>`<a href="#fix-${x.id}">${esc(x.t)}<span>→</span></a>`).join("")||`<p style="color:var(--muted)">No scenarios yet.</p>`}</div>
+    </section>
+    <section class="panel" aria-label="Ready for the next step">
+      <div><span class="lbl">Walk a deal through it</span><h2>Ready for the next step?</h2><p style="color:var(--muted);font-size:14px;margin-top:4px">Use in deal review. Ask the seller to show the evidence, not describe it.</p></div>
+      <div class="stack" style="gap:2px">${s.inspect.map((e,k)=>`<label class="check"><input type="checkbox" id="ck-${s.id}-${k}" data-k="${k}" ${ck[k]?"checked":""}><span>${esc(e[0])}${e[1]?`<small>${esc(e[1])}</small>`:""}</span></label>`).join("")}</div>
+      <div class="score"><span class="big">${c}/${n}</span>${v[1]?`<span class="st ${v[1]}">${v[0]}</span>`:`<span class="lbl">${v[0]}</span>`}<button class="btn ghost" id="clearDeal" type="button" style="margin-left:auto;padding:6px 12px;font-size:13px">Reset</button></div>
+    </section>
+    </div>
+  </div>
+  <div class="nav2">${prev?`<a class="tbtn" href="#${prev.id}">← ${esc(prev.name)}</a>`:`<a class="tbtn" href="#">← All steps</a>`}${next?`<a class="tbtn" href="#${next.id}">${esc(next.name)} →</a>`:`<a class="tbtn" href="#">All steps →</a>`}</div>`;
+}
+
+function doctorPage(){
+  const q=(S.dq||"").toLowerCase(),f=S.dstep||"All";
+  const list=SC.filter(x=>(f==="All"||x.steps.includes(f))&&(!q||(x.t+" "+x.sym).toLowerCase().includes(q)));
+  return `<section class="hero"><span class="lbl">Deal Doctor</span><h1>What's going wrong on the deal?</h1>
+    <p>Pick the symptom. Get the questions to ask your seller, the plays to try in order, a talk track they can use today, your move as their manager, and when to walk away.</p></section>
+   <section class="panel">
+    <div class="search"><input type="text" id="dq" placeholder="Search: budget, ghosted, competitor, procurement..." value="${esc(S.dq||"")}" aria-label="Search scenarios">
+      <div class="chips">${["All",...MAIN.map(s=>s.id)].map(id=>{const s=byId(id);return `<button class="chip ${f===id?"on":""}" data-df="${id}" type="button">${s?s.num+" "+esc(s.name):"All steps"}</button>`;}).join("")}</div></div>
+    <div class="sym">${list.map(symTile).join("")||`<p style="color:var(--muted)">Nothing matches. Try another word.</p>`}</div>
+   </section>`;
+}
+function symTile(x){return `<a class="symt" href="#fix-${x.id}"><b>${esc(x.t)}</b><span>${esc(x.sym)}</span><span class="dots">${x.steps.map(id=>{const s=byId(id);return `<i style="${cvars(s)}">${s.num} ${esc(s.name)}</i>`;}).join("")}</span></a>`;}
+
+function fixPage(x){
+  const ck=(S.fixck||{})[x.id]||[];
+  return `<a class="tbtn" href="#doctor" style="justify-self:start">← All scenarios</a>
+  <section class="shead" style="--c:var(--navy)">
+    <span class="lbl">Deal Doctor</span><h1 style="text-transform:none;letter-spacing:0">${esc(x.t)}</h1>
+    <p style="color:var(--ink);font-size:16px">${esc(x.sym)}</p>
+    <span class="dots">${x.steps.map(id=>{const s=byId(id);return `<a href="#${s.id}" style="text-decoration:none"><i style="${cvars(s)}">${s.num} ${esc(s.name)}</i></a>`;}).join("")}</span>
+  </section>
+  <div class="fx">
+    <div style="display:grid;gap:20px">
+      <section class="panel"><div><span class="lbl">Diagnose first</span><h2>Ask the seller</h2><p style="color:var(--muted);font-size:14px;margin-top:4px">Check off what they've already done. What's left is where to start.</p></div>
+        <div class="stack" style="gap:2px">${x.ask.map((a,k)=>`<label class="check"><input type="checkbox" id="fx-${x.id}-${k}" data-k="${k}" ${ck[k]?"checked":""}><span>${esc(a)}</span></label>`).join("")}</div></section>
+      <section class="panel"><h3>Your move as their manager</h3><ul class="list steps">${x.you.map(f=>`<li>${esc(f)}</li>`).join("")}</ul>
+        ${x.walk?`<div class="walk"><span class="lbl">When to walk away</span><br>${esc(x.walk)}</div>`:""}</section>
+    </div>
+    <div style="display:grid;gap:20px">
+      <section class="panel"><div><span class="lbl">Prescription</span><h2>Try these, in order</h2></div>
+        <ol class="plays">${x.plays.map(p=>`<li><div><b>${esc(p[0])}</b>${esc(p[1])}</div></li>`).join("")}</ol></section>
+      <section class="panel"><div><span class="lbl">Talk track</span><h2>Say it like this</h2></div>
+        <div class="say">${esc(x.say)}</div>
+        <div class="chips"><button class="btn ghost" id="copySay" type="button">Copy talk track</button><button class="btn" id="copyPlan" type="button">Copy coaching plan</button></div>
+        <div class="toast" id="toast"></div></section>
+    </div>
+  </div>
+  <section class="panel"><h3>Related scenarios</h3><div class="sym">${SC.filter(o=>o.id!==x.id&&o.steps.some(s=>x.steps.includes(s))).slice(0,6).map(symTile).join("")}</div></section>`;
+}
+function planText(x){
+  const ck=(S.fixck||{})[x.id]||[],open=x.ask.filter((_,k)=>!ck[k]);
+  return [`COACHING PLAN: ${x.t}`,``,`Check these first:`,...(open.length?open:x.ask).map(a=>`- ${a}`),``,`Try these, in order:`,...x.plays.map((p,i)=>`${i+1}. ${p[0]}: ${p[1]}`),``,`Say it like this:`,x.say,
+   ...(x.walk?[``,`When to walk away: ${x.walk}`]:[])].join("\n");
+}
+function bindDoctor(){
+  const dq=$("dq");dq.oninput=()=>{S.dq=dq.value;save();const pos=dq.selectionStart;$("app").innerHTML=doctorPage();bindDoctor();const n=$("dq");n.focus();n.setSelectionRange(pos,pos);};
+  document.querySelectorAll("[data-df]").forEach(b=>b.onclick=()=>{S.dstep=b.dataset.df;save();$("app").innerHTML=doctorPage();bindDoctor();});
+}
+function bindFix(x){
+  document.querySelectorAll(".check input").forEach(cb=>cb.onchange=()=>{S.fixck=S.fixck||{};const a=S.fixck[x.id]||(S.fixck[x.id]=[]);a[+cb.dataset.k]=cb.checked;save();});
+  $("copySay").onclick=()=>copy(x.say,()=>toast("Talk track copied"),()=>toast("Copy blocked. Select the text instead."));
+  $("copyPlan").onclick=()=>copy(planText(x),()=>toast("Coaching plan copied. Paste it to your seller."),()=>toast("Copy blocked. Select the text instead."));
+}
+
+function toast(t){const el=$("toast");if(!el)return;el.textContent=t;setTimeout(()=>{if(el)el.textContent="";},1800);}
+function copy(text,ok,fail){try{navigator.clipboard.writeText(text).then(ok,fail);}catch(e){fail&&fail();}}
+
+function route(){
+  const h=(location.hash||"").slice(1);const s=byId(h);const app=$("app");
+  renderStepper(s?s.id:"");
+  if(s){app.innerHTML=stepPage(s);bindStep(s);window.scrollTo(0,0);}
+  else if(h==="team-check"){app.innerHTML=teamPage();bindTeam();window.scrollTo(0,0);}
+  else if(h==="doctor"){app.innerHTML=doctorPage();bindDoctor();window.scrollTo(0,0);}
+  else if(h.startsWith("fix-")&&scById(h.slice(4))){const x=scById(h.slice(4));app.innerHTML=fixPage(x);bindFix(x);window.scrollTo(0,0);}
+  else{app.innerHTML=home();bindHome();if(h==="funnel"){const f=$("funnel");f&&f.scrollIntoView();}}
+}
+
+function bindHome(){
+  document.querySelectorAll("[data-role]").forEach(b=>b.onclick=()=>{S.role=b.dataset.role;save();route();});
+  bindFunnel();
+}
+function refreshFunnel(){const old=$("funnel");const tmp=document.createElement("div");tmp.innerHTML=funnelPanel();old.replaceWith(tmp.firstElementChild);bindFunnel();
+  // keep the team-gap chip on cards in sync
+  const w=weakest();document.querySelectorAll(".card").forEach(c=>{const g=c.querySelector(".gap");const id=c.getAttribute("href").slice(1);if(g)g.remove();if(w&&w.step===id){const sp=document.createElement("span");sp.className="gap";sp.textContent="Team gap";c.querySelector(".metric").before(sp);}});}
+function bindFunnel(){
+  $("fwho").onchange=e=>{S.fwho=e.target.value;save();refreshFunnel();};
+  document.querySelectorAll("[data-k]").forEach(inp=>inp.onchange=()=>{const cur=Object.assign({},funnelData().nums);cur[inp.dataset.k]=inp.value===""?"":+inp.value;S.funnel[S.fwho]=cur;save();refreshFunnel();});
+  document.querySelectorAll("[data-t]").forEach(inp=>inp.onchange=()=>{S.targets[inp.dataset.t]=+inp.value;save();refreshFunnel();});
+}
+function bindTeam(){
+  document.querySelectorAll(".cell").forEach(b=>b.onclick=()=>{const p=b.dataset.p,id=b.dataset.s;const r=S.team[p]||(S.team[p]={});r[id]=((r[id]||0)+1)%4;save();
+    const y=window.scrollY;$("app").innerHTML=teamPage();bindTeam();window.scrollTo(0,y);
+    const nb=document.querySelector(`.cell[data-p="${CSS.escape(p)}"][data-s="${id}"]`);nb&&nb.focus();});
+  const ct=$("clearTeam");if(ct)ct.onclick=()=>{S.team={};save();route();};
+  $("addForm").onsubmit=e=>{e.preventDefault();const v=$("newName").value.trim();if(v&&!team().includes(v)){S.names=[...team(),v];save();}$("app").innerHTML=teamPage();bindTeam();$("newName").focus();};
+  document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{const p=b.dataset.rm;S.names=team().filter(n=>n!==p);delete S.team[p];if(S.fwho===p)S.fwho="Team";save();$("app").innerHTML=teamPage();bindTeam();});
+}
+function bindStep(s){
+  document.querySelectorAll(".check input").forEach(cb=>cb.onchange=()=>{const a=S.checks[s.id]||(S.checks[s.id]=[]);a[+cb.dataset.k]=cb.checked;save();
+    const y=window.scrollY;route();window.scrollTo(0,y);});
+  document.querySelectorAll(".qbtn").forEach(b=>b.onclick=()=>{const t=b.firstElementChild.textContent;copy(t,()=>{b.classList.add("copied");b.lastElementChild.textContent="COPIED";setTimeout(()=>{b.classList.remove("copied");b.lastElementChild.textContent="COPY";},1400);});});
+  $("clearDeal").onclick=()=>{S.checks[s.id]=[];save();const y=window.scrollY;route();window.scrollTo(0,y);};
+}
+window.addEventListener("hashchange",route);
+route();
+</script>
+
+</body>
+</html>
